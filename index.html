@@ -1,675 +1,220 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>TrackDrive Exchange</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.31.0/tabler-icons.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --green:#009432;--lime:#C4E538;--amber:#FFA502;--ink:#444;
-    --bg:#F4F6F4;--card:#FFF;--line:#E3E7E3;--line2:#EEF1EE;
-    --t1:#2B2E2B;--t2:#6B706B;--t3:#9AA09A;
-    --gs:#E6F4EA;--ls:#F4F9E0;--as:#FFF3E0;
-    --head:'Rubik',sans-serif;--body:'Work Sans',sans-serif;
-    --side:#1C1F1E;--sideln:#2E3230;
-  }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:var(--body);background:var(--bg);color:var(--t1);-webkit-font-smoothing:antialiased;}
-  .cap{text-transform:uppercase;letter-spacing:.4px;}
-  button{font-family:var(--body);cursor:pointer;}
-  .hidden{display:none!important;}
-
-  /* ---------- LOGIN ---------- */
-  #login{min-height:100vh;display:flex;align-items:center;justify-content:center;background:radial-gradient(1200px 600px at 70% -10%,rgba(0,148,50,0.15) ,transparent),linear-gradient(160deg,#1C1F1E,#0d0f0e);padding:20px;}
-  .lcard{background:var(--card);border-radius:20px;width:100%;max-width:420px;padding:38px 34px;box-shadow:0 30px 80px rgba(0,0,0,.4);}
-  .lcard img{height:34px;margin-bottom:6px;}
-  .lcard .sub{color:var(--t2);font-size:14px;margin-bottom:26px;}
-  .lcard label{display:block;font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--t3);margin:16px 0 6px;}
-  .lcard input{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;font-family:var(--body);font-size:14px;background:#fafcfa;}
-  .lcard input:focus{outline:none;border-color:var(--green);}
-  .lbtn{width:100%;margin-top:24px;background:var(--green);color:#fff;border:none;padding:13px;border-radius:10px;font-weight:600;font-size:13px;letter-spacing:.4px;text-transform:uppercase;}
-  .lbtn:hover{filter:brightness(1.06);}
-  .lgate{margin-top:18px;font-size:11.5px;color:var(--t3);text-align:center;line-height:1.5;display:flex;gap:6px;align-items:center;justify-content:center;}
-  .roles{display:flex;flex-direction:column;gap:10px;margin:6px 0 4px;}
-  .role{display:flex;align-items:center;gap:13px;text-align:left;background:#fafcfa;border:1px solid var(--line);border-radius:12px;padding:14px;width:100%;transition:.12s;}
-  .role:hover{border-color:var(--green);background:#fff;box-shadow:0 3px 12px rgba(0,148,50,.08);}
-  .role .ri{width:40px;height:40px;flex:0 0 40px;border-radius:11px;background:var(--gs);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:20px;}
-  .role .ri.amber{background:var(--as);color:var(--amber);}.role .ri.lime{background:var(--ls);color:#6f8c00;}
-  .role .rt{flex:1;}
-  .role .rt b{font-family:var(--head);font-weight:500;font-size:14.5px;display:block;margin-bottom:2px;}
-  .role .rt span{font-size:11.5px;color:var(--t2);line-height:1.4;}
-  .role .rc{color:var(--t3);font-size:18px;}
-  .claimnum{display:flex;align-items:center;gap:9px;background:var(--gs);border:1px solid #cfe8d6;border-radius:11px;padding:14px 16px;font-family:var(--head);font-size:19px;font-weight:500;color:var(--green);margin-bottom:16px;}
-  .claimnum i{font-size:20px;}
-  .claimtag{margin-left:auto;font-family:var(--body);font-size:10px;font-weight:600;color:#fff;background:var(--green);padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.3px;}
-  .tag2{font-size:9px;font-weight:600;color:var(--green);background:var(--gs);padding:2px 7px;border-radius:20px;text-transform:uppercase;letter-spacing:.3px;margin-left:5px;vertical-align:middle;}
-  .ldiv{display:flex;align-items:center;gap:10px;margin:22px 0 4px;color:var(--t3);font-size:11px;}
-  .ldiv .l{flex:1;height:1px;background:var(--line2);}
-  .linkbtn{width:100%;margin-top:14px;background:#fff;color:var(--t1);border:1px solid var(--line);padding:12px;border-radius:10px;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center;gap:8px;}
-  .linkbtn:hover{border-color:var(--green);color:var(--green);}
-  .linkbtn i{font-size:18px;}
-
-  /* ---------- APP SHELL ---------- */
-  #app{display:flex;min-height:100vh;}
-  .side{width:230px;flex:0 0 230px;background:var(--side);color:#cfd8d1;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;}
-  .side .brand{padding:20px 20px 16px;border-bottom:1px solid var(--sideln);background:#fff;}
-  .side .brand img{height:26px;}
-  .nav{padding:12px 10px;flex:1;overflow-y:auto;}
-  .nav a{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:9px;color:#aebbb2;font-size:13.5px;font-weight:500;text-decoration:none;margin-bottom:2px;cursor:pointer;transition:.12s;}
-  .nav a i{font-size:18px;}
-  .nav a:hover{background:var(--sideln);color:#fff;}
-  .nav a.on{background:var(--green);color:#fff;}
-  .nav .sec{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#5f6f65;padding:14px 12px 6px;}
-  .side .foot{padding:12px;border-top:1px solid var(--sideln);}
-  .side .foot a{display:flex;align-items:center;gap:10px;padding:9px 12px;color:#8f9d94;font-size:13px;text-decoration:none;border-radius:8px;cursor:pointer;}
-  .side .foot a:hover{background:var(--sideln);color:#fff;}
-
-  .main{flex:1;min-width:0;display:flex;flex-direction:column;}
-  .head{background:var(--card);border-bottom:1px solid var(--line);padding:14px 26px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;}
-  .head .money{display:flex;gap:22px;}
-  .head .m{display:flex;align-items:center;gap:9px;}
-  .head .m .ic{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;}
-  .head .m.rec .ic{background:var(--gs);color:var(--green);}
-  .head .m.pen .ic{background:var(--as);color:var(--amber);}
-  .head .m .v{font-family:var(--head);font-weight:600;font-size:16px;line-height:1;}
-  .head .m .l{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;}
-  .head .who{display:flex;align-items:center;gap:10px;}
-  .head .who .av{width:34px;height:34px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px;}
-  .head .who .nm{font-size:13px;font-weight:600;}
-  .head .who .rl{font-size:11px;color:var(--t3);}
-
-  .content{padding:26px;flex:1;}
-  .page{display:none;animation:f .2s;}
-  .page.on{display:block;}
-  @keyframes f{from{opacity:0;transform:translateY(4px);}to{opacity:1;}}
-
-  .ptitle{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
-  .ptitle h1{font-family:var(--head);font-weight:500;font-size:26px;display:flex;align-items:center;gap:10px;}
-  .ptitle h1 i{color:var(--green);}
-  .ptitle .sub{color:var(--t2);font-size:13px;margin-top:3px;}
-
-  .btn{background:var(--green);color:#fff;border:none;padding:10px 16px;border-radius:9px;font-weight:600;font-size:12.5px;letter-spacing:.3px;text-transform:uppercase;display:inline-flex;align-items:center;gap:7px;}
-  .btn:hover{filter:brightness(1.06);}
-  .btn.ghost{background:#fff;color:var(--t1);border:1px solid var(--line);}
-  .btn.ghost:hover{border-color:var(--green);color:var(--green);}
-  .btn.sm{padding:7px 12px;font-size:11px;}
-
-  /* stat cards */
-  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px;}
-  .stat{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:16px 18px;}
-  .stat .ic{width:36px;height:36px;border-radius:10px;background:var(--gs);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:11px;}
-  .stat.a .ic{background:var(--as);color:var(--amber);} .stat.l .ic{background:var(--ls);color:#6f8c00;}
-  .stat .v{font-family:var(--head);font-weight:600;font-size:26px;line-height:1;}
-  .stat .l{font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.4px;margin-top:5px;}
-  .stat .d{font-size:11px;margin-top:6px;color:var(--green);}
-
-  .card{background:var(--card);border:1px solid var(--line);border-radius:13px;overflow:hidden;margin-bottom:18px;}
-  .card .ch{padding:15px 18px;border-bottom:1px solid var(--line2);display:flex;align-items:center;justify-content:space-between;}
-  .card .ch h3{font-family:var(--head);font-weight:500;font-size:16px;}
-  .card .cb{padding:4px 0;}
-
-  table{width:100%;border-collapse:collapse;}
-  th{text-align:left;padding:11px 18px;font-size:10.5px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;color:var(--t3);border-bottom:1px solid var(--line2);}
-  td{padding:13px 18px;font-size:13px;border-bottom:1px solid var(--line2);color:var(--t1);}
-  tr:last-child td{border-bottom:none;}
-  tr:hover td{background:#fafcfa;}
-  .badge{font-size:10.5px;font-weight:600;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.3px;}
-  .badge.ok{background:var(--gs);color:var(--green);}
-  .badge.av{background:#eaf0ff;color:#3557c7;}
-  .badge.pn{background:var(--as);color:#b57400;}
-  .badge.pa{background:#f4f4f4;color:#888;}
-  .src{font-size:11px;color:var(--green);display:inline-flex;align-items:center;gap:4px;}
-  .tact{color:var(--green);font-weight:600;font-size:12px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;}
-
-  /* marketplace */
-  .fmtbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
-  .fmt{font-weight:600;font-size:12px;padding:8px 15px;border-radius:9px;border:1px solid var(--line);background:#fff;color:var(--t2);display:inline-flex;gap:6px;align-items:center;text-transform:uppercase;letter-spacing:.3px;}
-  .fmt.on{background:var(--green);color:#fff;border-color:var(--green);}
-  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-  .lot{border:1px solid var(--line);border-radius:13px;padding:16px;background:#fff;}
-  .lot .r1{display:flex;justify-content:space-between;gap:12px;}
-  .lot h4{font-family:var(--head);font-weight:500;font-size:15px;margin-bottom:6px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
-  .fbg{font-size:10px;font-weight:600;padding:2px 8px;border-radius:6px;text-transform:uppercase;}
-  .fbg.call{background:var(--gs);color:var(--green);}.fbg.lead{background:var(--as);color:#b57400;}.fbg.xfer{background:var(--ls);color:#6f8c00;}
-  .lot .meta{font-size:11.5px;color:var(--t2);display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
-  .lot .live{display:inline-flex;gap:5px;align-items:center;color:var(--green);font-weight:600;}
-  .dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:p 1.4s infinite;}
-  @keyframes p{0%,100%{opacity:1;}50%{opacity:.3;}}
-  .lot .chan{font-size:10.5px;color:var(--t3);margin-top:8px;display:flex;gap:9px;align-items:center;flex-wrap:wrap;}
-  .lot .chan code{font-family:ui-monospace,monospace;background:var(--bg);padding:2px 7px;border-radius:5px;}
-  .lot .bid .amt{font-family:var(--head);font-weight:600;font-size:22px;color:var(--green);line-height:1;text-align:right;}
-  .lot .bid .l{font-size:10px;color:var(--t3);text-align:right;}
-  .lot .bar{margin-top:12px;height:5px;border-radius:3px;background:var(--line2);overflow:hidden;}
-  .lot .bar span{display:block;height:100%;background:var(--green);}
-  .lot .act{margin-top:12px;display:flex;gap:8px;}
-  .lot .act .btn{flex:1;justify-content:center;}
-  .demobar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;padding:11px 13px;background:var(--gs);border-radius:10px;}
-  .demobar .l{font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--green);width:100%;font-weight:600;margin-bottom:3px;}
-  .demo{font-size:11px;padding:5px 10px;border-radius:6px;background:#fff;color:var(--green);border:1px solid #cfe8d6;}
-  .chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px;}
-  .chip{font-size:11.5px;font-weight:600;padding:6px 12px;border-radius:20px;border:1px solid var(--line);background:#fff;color:var(--t2);}
-  .chip.on{background:var(--green);color:#fff;border-color:var(--green);}
-
-  .note{padding:14px 16px;background:var(--gs);border:1px solid #cfe8d6;border-radius:11px;font-size:12.5px;color:#1c5c34;line-height:1.5;}
-  .note b{color:var(--green);}
-  .wedge{background:linear-gradient(100deg,#012a12,#014d20);border-radius:14px;padding:20px 22px;color:#fff;display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-bottom:22px;}
-  .wedge .big{font-family:var(--head);font-weight:600;font-size:34px;color:var(--lime);line-height:1;}
-  .wedge .wt h4{font-family:var(--head);font-weight:500;font-size:17px;margin-bottom:4px;}
-  .wedge .wt p{font-size:12.5px;color:#B9C9BC;line-height:1.5;max-width:640px;}
-
-  /* apply / vetting steps */
-  .steps{display:flex;flex-direction:column;gap:10px;}
-  .step{display:flex;gap:13px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 16px;}
-  .step .n{width:26px;height:26px;flex:0 0 26px;border-radius:50%;background:var(--green);color:#fff;font-family:var(--head);font-weight:500;font-size:12px;display:flex;align-items:center;justify-content:center;}
-  .step .ic{color:var(--green);font-size:18px;margin-top:1px;}
-  .step h4{font-family:var(--head);font-weight:500;font-size:14px;margin-bottom:2px;}
-  .step p{font-size:12.5px;color:var(--t2);line-height:1.45;}
-  .vet{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:14px;}
-  .vc{border:1px solid var(--line);border-radius:11px;padding:15px;background:#fff;}
-  .vc .ic{font-size:19px;color:var(--green);margin-bottom:8px;}
-  .vc.amber .ic{color:var(--amber);}
-  .vc h4{font-family:var(--head);font-weight:500;font-size:14px;margin-bottom:3px;}
-  .vc p{font-size:12px;color:var(--t2);line-height:1.45;}
-  .contract{background:var(--as);border:1px solid #f5d9a8;border-radius:11px;padding:14px 16px;display:flex;gap:11px;align-items:flex-start;}
-  .contract .ic{color:var(--amber);font-size:18px;margin-top:1px;}
-  .contract p{font-size:12.5px;color:#6b4c10;line-height:1.5;}
-  .contract b{color:#3d2c08;}
-
-  /* doors */
-  .doors{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px;}
-  .door{border:1px solid var(--line);border-radius:13px;padding:16px;background:#fff;}
-  .door .ic{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;margin-bottom:11px;background:var(--gs);color:var(--green);}
-  .door.c2 .ic{background:var(--as);color:var(--amber);}.door.c3 .ic{background:var(--ls);color:#6f8c00;}
-  .door h4{font-family:var(--head);font-weight:500;font-size:16px;margin-bottom:4px;}
-  .door .v{font-size:11.5px;font-style:italic;color:var(--t3);margin-bottom:9px;}
-  .door p{font-size:12px;color:var(--t2);line-height:1.5;}
-
-  @media(max-width:900px){.stats,.doors{grid-template-columns:1fr 1fr;}.grid2,.vet{grid-template-columns:1fr;}.side{display:none;}}
-
-  /* modals */
-  .overlay{position:fixed;inset:0;background:rgba(15,20,16,.55);display:none;align-items:flex-start;justify-content:center;z-index:100;padding:40px 16px;overflow-y:auto;}
-  .overlay.on{display:flex;}
-  .modal{background:var(--card);border-radius:16px;width:100%;max-width:560px;box-shadow:0 30px 90px rgba(0,0,0,.35);}
-  .modal .mh{padding:18px 22px;border-bottom:1px solid var(--line2);display:flex;align-items:center;justify-content:space-between;}
-  .modal .mh h3{font-family:var(--head);font-weight:500;font-size:18px;display:flex;align-items:center;gap:9px;}
-  .modal .mh h3 .badge{margin-left:4px;}
-  .modal .x{background:none;border:none;font-size:22px;color:var(--t3);line-height:1;}
-  .modal .x:hover{color:var(--t1);}
-  .mb{padding:20px 22px;}
-  .field{margin-bottom:15px;}
-  .field label{display:block;font-size:12px;font-weight:600;margin-bottom:5px;}
-  .field .hint{font-size:11px;color:var(--t3);font-weight:400;margin-left:5px;}
-  .field input,.field select,.field textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:9px;font-family:var(--body);font-size:13px;background:#fafcfa;}
-  .field input:focus,.field select:focus{outline:none;border-color:var(--green);}
-  .frow{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-  .toggle{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--line2);}
-  .toggle .tl{font-size:13px;font-weight:500;}
-  .toggle .tl .hint{display:block;font-size:11px;color:var(--t3);font-weight:400;margin-top:2px;}
-  .sw{width:42px;height:24px;border-radius:20px;background:var(--line);position:relative;cursor:pointer;flex:0 0 42px;transition:.15s;}
-  .sw::after{content:"";position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:3px;left:3px;transition:.15s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
-  .sw.on{background:var(--green);}.sw.on::after{left:21px;}
-  .mf{padding:16px 22px;border-top:1px solid var(--line2);display:flex;gap:10px;justify-content:flex-end;}
-  .seg{display:inline-flex;background:var(--bg);border-radius:9px;padding:3px;gap:2px;}
-  .seg button{border:none;background:none;padding:8px 14px;border-radius:7px;font-size:12px;font-weight:600;color:var(--t2);}
-  .seg button.on{background:var(--green);color:#fff;}
-  .dl{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line2);font-size:13px;}
-  .dl .k{color:var(--t2);}.dl .v{font-weight:600;}
-  .tsrc{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
-  .tsrc span{font-size:11px;padding:4px 10px;border-radius:6px;background:var(--gs);color:var(--green);border:1px solid #cfe8d6;}
-  .synced{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12.5px;color:var(--t2);background:var(--gs);border:1px solid #cfe8d6;border-radius:10px;padding:11px 14px;margin-bottom:16px;}
-  .synced b{color:var(--green);}
-  .synced .sd{width:8px;height:8px;border-radius:50%;background:var(--green);animation:p 1.4s infinite;flex:0 0 8px;}
-  .synced .slink{margin-left:auto;color:var(--green);font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:4px;}
-  .dcell{display:flex;flex-direction:column;line-height:1.25;}
-  .dcell .dd{font-weight:600;font-size:13px;}
-  .dcell .dt{font-size:11px;color:var(--t3);}
-  .mono{font-family:ui-monospace,monospace;font-size:12px;color:var(--t2);}
-  .dur{font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--t2);}
-  .stcell{display:inline-flex;align-items:center;gap:7px;font-weight:600;}
-  .stcell .d2{width:7px;height:7px;border-radius:50%;flex:0 0 7px;}
-  .stcell.paid{color:var(--green);}.stcell.paid .d2{background:var(--green);}
-  .stcell.miss{color:var(--t3);}.stcell.miss .d2{background:var(--line);}
-  /* AI OPS */
-  .botcard{display:flex;gap:16px;align-items:flex-start;background:linear-gradient(120deg,#eafaef,#f4f9e0);border:1px solid #cfe8d6;border-radius:16px;padding:18px 20px;margin-bottom:22px;}
-  .bot{flex:0 0 auto;}
-  .face{width:56px;height:56px;border-radius:16px;background:var(--green);position:relative;box-shadow:0 6px 16px rgba(0,148,50,.3);animation:bob 3s ease-in-out infinite;}
-  @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
-  .face .eye{position:absolute;width:9px;height:9px;border-radius:50%;background:#fff;top:19px;animation:blink 4s infinite;}
-  .face .eye.l{left:14px;}.face .eye.r{right:14px;}
-  @keyframes blink{0%,92%,100%{transform:scaleY(1);}96%{transform:scaleY(.1);}}
-  .face .mouth{position:absolute;width:20px;height:10px;border:2.5px solid #fff;border-top:none;border-radius:0 0 12px 12px;bottom:14px;left:50%;transform:translateX(-50%);}
-  .botmsg{flex:1;}
-  .bname{font-family:var(--head);font-weight:500;font-size:15px;margin-bottom:5px;}
-  .bname .bt{font-size:10px;font-weight:600;color:var(--green);background:#fff;padding:2px 8px;border-radius:20px;margin-left:6px;letter-spacing:.3px;text-transform:uppercase;}
-  .botmsg p{font-size:13.5px;color:var(--t1);line-height:1.55;margin-bottom:12px;}
-  .bactions{display:flex;gap:8px;flex-wrap:wrap;}
-  .lbl2{display:flex;align-items:center;margin:6px 0 12px;}
-  .lbl2>span:first-child{font-family:var(--body);font-weight:600;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--t3);}
-  .aicard{background:#fff;border:1px solid var(--line);border-radius:13px;padding:16px;}
-  .aicard .ah{font-family:var(--head);font-weight:500;font-size:14px;margin-bottom:8px;display:flex;align-items:center;gap:8px;}
-  .aicard .ah i{color:var(--green);font-size:18px;}
-  .aicard p{font-size:12.5px;color:var(--t2);line-height:1.55;margin-bottom:10px;}
-  .senti{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;}
-  .senti.pos{color:var(--green);}.senti.neg{color:var(--amber);}
-</style>
-</head>
-<body>
-
-<!-- ================= LOGIN ================= -->
-<div id="login" class="hidden">
-    <div class="lcard" id="gateStep1">
-    <span style="display:inline-flex;align-items:center;gap:8px;font-family:'Rubik',sans-serif;font-weight:600;font-size:20px;color:#2B2E2B;"><span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;background:linear-gradient(135deg,#009432,#C4E538);color:#fff;border-radius:8px;font-size:14px;">TD</span>TrackDrive</span>
-    <div class="sub">The exchange for calls &amp; leads. Apply to join — curated for quality.</div>
-    <button class="lbtn" onclick="gateNext()">Apply for access</button>
-    <div class="ldiv"><div class="l"></div>have an invite?<div class="l"></div></div>
-    <div class="field" style="margin-bottom:0;"><input id="invite" placeholder="Invite code — skip the waitlist" value=""></div>
-    <button class="linkbtn" style="margin-top:12px;" onclick="gateNext()"><i class="ti ti-ticket"></i> Fast-track with invite</button>
-    <button class="linkbtn" style="margin-top:10px;" onclick="signin()"><i class="ti ti-login"></i> Sign in</button>
-    <div class="lgate"><i class="ti ti-lock"></i> Curated marketplace — we vet every member to protect our brands.</div>
-  </div>
-
-  <div class="lcard hidden" id="gateStep2">
-    <span style="display:inline-flex;align-items:center;gap:8px;font-family:'Rubik',sans-serif;font-weight:600;font-size:20px;color:#2B2E2B;"><span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;background:linear-gradient(135deg,#009432,#C4E538);color:#fff;border-radius:8px;font-size:14px;">TD</span>TrackDrive</span>
-    <div class="sub">What brings you to the exchange?</div>
-    <div class="roles">
-      <button class="role" onclick="pickRole('sell')">
-        <div class="ri"><i class="ti ti-cash"></i></div>
-        <div class="rt"><b>Sell calls &amp; leads</b><span>Creators, advertisers, anyone driving traffic. Get paid per qualified call or lead.</span></div>
-        <i class="ti ti-chevron-right rc"></i>
-      </button>
-      <button class="role" onclick="pickRole('buy')">
-        <div class="ri amber"><i class="ti ti-building"></i></div>
-        <div class="rt"><b>Buy calls &amp; leads</b><span>Brands &amp; buyers — Liberty Mutual, GEICO. Bid on verified, exclusive inventory.</span></div>
-        <i class="ti ti-chevron-right rc"></i>
-      </button>
-      <button class="role" onclick="pickRole('broker')">
-        <div class="ri lime"><i class="ti ti-arrows-exchange"></i></div>
-        <div class="rt"><b>Broker</b><span>Vetted brokers welcome. Extra compliance review before you're approved.</span></div>
-        <i class="ti ti-chevron-right rc"></i>
-      </button>
-    </div>
-    <div class="lgate" id="gateHint"><i class="ti ti-info-circle"></i> Everyone gets a TrackDrive account underneath — simple users never have to touch it.</div>
-  </div>
-
-  <div class="lcard hidden" id="gateStep3">
-    <span style="display:inline-flex;align-items:center;gap:8px;font-family:'Rubik',sans-serif;font-weight:600;font-size:20px;color:#2B2E2B;"><span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;background:linear-gradient(135deg,#009432,#C4E538);color:#fff;border-radius:8px;font-size:14px;">TD</span>TrackDrive</span>
-    <div class="sub" id="tierTitle">Sell calls &amp; leads</div>
-    <div class="roles">
-      <button class="role" onclick="gateClaim()">
-        <div class="ri"><i class="ti ti-wand"></i></div>
-        <div class="rt"><b>Simple <span class="tag2">recommended</span></b><span>Everything runs inside the marketplace. We create &amp; manage your TrackDrive number invisibly. Tag an offer, get paid.</span></div>
-        <i class="ti ti-chevron-right rc"></i>
-      </button>
-      <button class="role" onclick="signin()">
-        <div class="ri lime"><i class="ti ti-adjustments"></i></div>
-        <div class="rt"><b>Pro — full TrackDrive</b><span>Go direct into TrackDrive for full control of numbers, routing, and RTB. For technical sellers &amp; brokers.</span></div>
-        <i class="ti ti-chevron-right rc"></i>
-      </button>
-    </div>
-    <button class="linkbtn" style="margin-top:8px;" onclick="gateBack()"><i class="ti ti-arrow-left"></i> Back</button>
-    <div class="lgate"><i class="ti ti-shield-check"></i> Light identity check on every account — keeps scammers off the rail.</div>
-    <div class="lcard hidden" id="gateStep4">
-    <span style="display:inline-flex;align-items:center;gap:8px;font-family:'Rubik',sans-serif;font-weight:600;font-size:20px;color:#2B2E2B;"><span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;background:linear-gradient(135deg,#009432,#C4E538);color:#fff;border-radius:8px;font-size:14px;">TD</span>TrackDrive</span>
-    <div class="sub">Claim your number — this is your magic link.</div>
-    <div class="note" style="margin:0 0 16px;text-align:left;"><b>How it works:</b> every call to your number earns you money. Put it in your videos, bio, ads — everywhere. We track every call and pay you.</div>
-    <label>Number type</label>
-    <div class="seg" style="width:100%;margin-bottom:14px;">
-      <button class="on" style="flex:1" onclick="segPick(this)">Local <span style="opacity:.7;font-weight:400">· feels personal</span></button>
-      <button style="flex:1" onclick="segPick(this)">Toll-free <span style="opacity:.7;font-weight:400">· feels national</span></button>
-    </div>
-    <div class="claimnum"><i class="ti ti-phone"></i> +1 (720) 555-0<b>142</b> <span class="claimtag">your magic link</span></div>
-    <button class="lbtn" onclick="signin()">Claim this number &amp; enter</button>
-    <button class="linkbtn" style="margin-top:10px;" onclick="gateBackClaim()"><i class="ti ti-arrow-left"></i> Back</button>
-    <div class="lgate"><i class="ti ti-info-circle"></i> One number = your storefront. Pros can add more numbers &amp; rotation later.</div>
-  </div>
-</div>
-
-<!-- ================= APP ================= -->
+:root{--green:#009432;--lime:#C4E538;--amber:#FFA502;--bg:#F4F6F4;--card:#fff;--line:#E3E7E3;--t1:#2B2E2B;--t2:#6B706B;--t3:#9AA09A;--side:#1C1F1E;}
+*{box-sizing:border-box;margin:0;padding:0}
+body,button,input{font-family:'Work Sans',-apple-system,sans-serif}
+h1,.brand,.stat .v{font-family:'Rubik',sans-serif}
+body{background:var(--bg);color:var(--t1)}
+#app{display:flex;min-height:100vh}
+.side{width:210px;flex:0 0 210px;background:var(--side);color:#cfd8d1;padding:16px 10px}
+.brand{color:#fff;font-weight:600;font-size:17px;padding:8px 12px 18px;display:flex;align-items:center;gap:8px}
+.brand .m{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#009432,#C4E538);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px}
+.nav a{display:block;padding:10px 12px;border-radius:9px;color:#aebbb2;font-size:13.5px;cursor:pointer;margin-bottom:2px;font-weight:500}
+.nav a:hover{background:#2E3230;color:#fff}
+.nav a.on{background:var(--green);color:#fff}
+.sec{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#5f6f65;padding:14px 12px 6px}
+.main{flex:1;min-width:0}
+.top{background:#fff;border-bottom:1px solid var(--line);padding:14px 24px;display:flex;justify-content:space-between;align-items:center}
+.money{display:flex;gap:22px;font-size:13px}
+.m{display:flex;align-items:center;gap:9px}
+.mic{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700}
+.m.rec .mic{background:#E6F4EA;color:var(--green)}
+.m.pen .mic{background:#FFF3E0;color:var(--amber)}
+.mv{display:block;font-family:'Rubik';font-weight:600;font-size:15px;line-height:1}
+.ml{display:block;font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.content{padding:26px}
+.page{display:none}.page.on{display:block}
+h1{font-size:25px;margin-bottom:5px}
+.psub{color:var(--t2);font-size:13px;margin-bottom:20px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:20px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:17px;box-shadow:0 1px 3px rgba(0,0,0,.03)}
+.stat .v{font-size:25px;font-weight:600}.stat .l{font-size:11px;color:var(--t3);text-transform:uppercase;margin-top:4px}
+.wedge{background:linear-gradient(100deg,#012a12,#014d20);border-radius:14px;padding:20px 22px;color:#fff;display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-bottom:20px}
+.wedge .big{font-family:'Rubik';font-weight:600;font-size:34px;color:var(--lime)}
+.wedge h4{font-family:'Rubik';font-weight:500;font-size:17px;margin-bottom:3px}.wedge p{font-size:12.5px;color:#B9C9BC;line-height:1.5;max-width:620px}
+.doors{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.door{border:1px solid var(--line);border-radius:13px;padding:16px;background:#fff}
+.door .i{width:38px;height:38px;border-radius:10px;background:#E6F4EA;color:var(--green);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;margin-bottom:10px}
+.door.c2 .i{background:#FFF3E0;color:var(--amber)}.door.c3 .i{background:#F4F9E0;color:#6f8c00}
+.door h4{font-family:'Rubik';font-weight:500;font-size:15px;margin-bottom:3px}.door p{font-size:12px;color:var(--t2);line-height:1.45}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:13px;overflow:hidden}
+th{text-align:left;padding:11px 16px;font-size:10.5px;text-transform:uppercase;color:var(--t3);border-bottom:1px solid var(--line)}
+td{padding:12px 16px;font-size:13px;border-bottom:1px solid #f1f1f1}tr:last-child td{border-bottom:none}
+.badge{font-size:10.5px;font-weight:600;padding:3px 9px;border-radius:20px;background:#E6F4EA;color:var(--green)}
+.badge.a{background:#FFF3E0;color:#b57400}.badge.p{background:#f3f3f3;color:#888}
+.fmt{display:inline-block;padding:7px 14px;border:1px solid var(--line);border-radius:9px;background:#fff;font-size:12px;font-weight:600;cursor:pointer;margin-right:6px}
+.fmt.on{background:var(--green);color:#fff;border-color:var(--green)}
+.lot{border:1px solid var(--line);border-radius:13px;padding:15px;margin-bottom:11px;display:flex;justify-content:space-between;align-items:center;background:#fff}
+.lot .amt{font-size:21px;font-weight:600;color:var(--green);font-family:'Rubik'}
+.src{color:var(--green);font-size:12px}
+.card2{background:#fff;border:1px solid var(--line);border-radius:13px;padding:17px;margin-bottom:15px}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+.chip{font-size:11.5px;font-weight:600;padding:6px 12px;border-radius:20px;border:1px solid var(--line);background:#fff;color:var(--t2);cursor:pointer}
+.chip.on{background:var(--green);color:#fff;border-color:var(--green)}
+.demobar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;padding:12px 14px;background:#E6F4EA;border:1px solid #cfe8d6;border-radius:10px;align-items:center}
+.dl2{font-size:10px;letter-spacing:.5px;color:var(--green);width:100%;font-weight:600;margin-bottom:4px}
+.demo{font-size:11px;padding:5px 10px;border-radius:6px;background:#fff;color:var(--green);border:1px solid #cfe8d6}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.mlot{border:1px solid var(--line);border-radius:13px;padding:16px;background:#fff}
+.mr1{display:flex;justify-content:space-between;gap:12px}
+.mlot h4{font-family:'Rubik';font-weight:500;font-size:15px;margin-bottom:6px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.fbg{font-size:10px;font-weight:600;padding:2px 8px;border-radius:6px;text-transform:uppercase}
+.fbg.call{background:#E6F4EA;color:var(--green)}.fbg.lead{background:#FFF3E0;color:#b57400}.fbg.xfer{background:#F4F9E0;color:#6f8c00}
+.mmeta{font-size:11.5px;color:var(--t2)}
+.live{display:inline-flex;gap:5px;align-items:center;color:var(--green);font-weight:600}
+.ldot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:p 1.4s infinite}
+.mchan{font-size:10.5px;color:var(--t3);margin-top:8px;display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.mchan code{font-family:ui-monospace,monospace;background:var(--bg);padding:2px 7px;border-radius:5px}
+.mbid{text-align:right;flex:0 0 auto}
+.mamt{font-family:'Rubik';font-weight:600;font-size:22px;color:var(--green);line-height:1}
+.mbl{font-size:10px;color:var(--t3)}
+.mbar{margin-top:12px;height:5px;border-radius:3px;background:#EEF1EE;overflow:hidden}
+.mbar span{display:block;height:100%;background:var(--green)}
+.mact{margin-top:12px}
+.mbtn{width:100%;background:var(--green);color:#fff;border:none;font-weight:600;font-size:11.5px;padding:9px;border-radius:8px;cursor:pointer;letter-spacing:.4px}
+@media(max-width:900px){.mgrid{grid-template-columns:1fr}}
+.synced{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12.5px;color:var(--t2);background:#E6F4EA;border:1px solid #cfe8d6;border-radius:10px;padding:11px 14px;margin-bottom:16px}
+.synced b{color:var(--green)}
+.synced .sd{width:8px;height:8px;border-radius:50%;background:var(--green);animation:p 1.4s infinite;flex:0 0 8px}
+@keyframes p{0%,100%{opacity:1}50%{opacity:.3}}
+.synced .slink{margin-left:auto;color:var(--green);font-weight:600;cursor:pointer}
+.dcell{display:flex;flex-direction:column;line-height:1.25}
+.dcell .dd{font-weight:600;font-size:13px}
+.dcell .dt{font-size:11px;color:var(--t3)}
+.mono{font-family:ui-monospace,monospace;font-size:12px;color:var(--t2)}
+.dur{font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--t2)}
+.stc{display:inline-flex;align-items:center;gap:7px;font-weight:600}
+.stc .d2{width:7px;height:7px;border-radius:50%;flex:0 0 7px}
+.stc.paid{color:var(--green)}.stc.paid .d2{background:var(--green)}
+.stc.miss{color:var(--t3)}.stc.miss .d2{background:var(--line)}
+.tact{color:var(--green);font-weight:600;font-size:12px;cursor:pointer}
+.note{background:#E6F4EA;border:1px solid #cfe8d6;border-radius:11px;padding:13px 15px;font-size:12.5px;color:#1c5c34;line-height:1.5}
+.bot{display:flex;gap:15px;background:linear-gradient(120deg,#eafaef,#f4f9e0);border:1px solid #cfe8d6;border-radius:15px;padding:19px;margin-bottom:20px}
+.face{width:52px;height:52px;border-radius:14px;background:var(--green);position:relative;flex:0 0 52px}
+.face:before,.face:after{content:"";position:absolute;width:8px;height:8px;border-radius:50%;background:#fff;top:18px}.face:before{left:14px}.face:after{right:14px}
+.face span{position:absolute;width:18px;height:9px;border:2.5px solid #fff;border-top:none;border-radius:0 0 11px 11px;bottom:13px;left:50%;transform:translateX(-50%)}
+.bot b{font-family:'Rubik';font-weight:500}.bot p{font-size:13px;line-height:1.55;margin-top:5px}
+.step{display:flex;gap:12px;background:#fff;border:1px solid var(--line);border-radius:11px;padding:13px 15px;margin-bottom:9px}
+.step .n{width:25px;height:25px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex:0 0 25px}
+.step b{font-family:'Rubik';font-weight:500;font-size:14px}.step p{font-size:12.5px;color:var(--t2);margin-top:2px;line-height:1.4}
+</style></head><body>
 <div id="app">
-  <aside class="side">
-    <div class="brand"><span style="display:inline-flex;align-items:center;gap:8px;font-family:'Rubik',sans-serif;font-weight:600;font-size:20px;color:#2B2E2B;"><span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;background:linear-gradient(135deg,#009432,#C4E538);color:#fff;border-radius:8px;font-size:14px;">TD</span>TrackDrive</span></div>
-    <nav class="nav">
-      <a class="on" data-pg="dash"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
-      <a data-pg="market"><i class="ti ti-building-store"></i> Marketplace</a>
-      <a data-pg="offers"><i class="ti ti-tags"></i> Offers</a>
-      <a data-pg="calls"><i class="ti ti-phone"></i> Call Logs</a>
-      <a data-pg="ai"><i class="ti ti-sparkles"></i> AI Ops</a>
-      <div class="sec">Exchange</div>
-      <a data-pg="buyers"><i class="ti ti-building"></i> Buyers &amp; Brands</a>
-      <a data-pg="apply"><i class="ti ti-clipboard-check"></i> Apply &amp; RTT</a>
-      <a data-pg="rtb"><i class="ti ti-activity"></i> RTB Health</a>
-      <a data-pg="vet"><i class="ti ti-shield-check"></i> Vetting</a>
-      <a data-pg="comp"><i class="ti ti-certificate"></i> Compliance</a>
-      <div class="sec">Platform</div>
-      <a data-pg="wl"><i class="ti ti-palette"></i> White-Label</a>
-    </nav>
-    <div class="foot">
-      <a onclick="signout()"><i class="ti ti-logout"></i> Sign out</a>
-    </div>
-  </aside>
-
-  <div class="main">
-    <div class="head">
-      <div class="money">
-        <div class="m rec"><div class="ic"><i class="ti ti-cash"></i></div><div><div class="v">$9,779</div><div class="l">Received</div></div></div>
-        <div class="m pen"><div class="ic"><i class="ti ti-clock"></i></div><div><div class="v">$0.00</div><div class="l">Pending</div></div></div>
-      </div>
-      <div class="who"><div class="av">S</div><div><div class="nm">Samantha</div><div class="rl">TrackDrive · Admin</div></div></div>
-    </div>
-
-    <div class="content">
-
-      <!-- DASH -->
-      <div class="page on" data-page="dash">
-        <div class="ptitle"><div><h1><i class="ti ti-layout-dashboard"></i> Dashboard</h1><div class="sub">One marketplace. Every kind of demand.</div></div></div>
-        <div class="stats">
-          <div class="stat"><div class="ic"><i class="ti ti-phone-call"></i></div><div class="v">598</div><div class="l">Total calls</div><div class="d">+12% vs last wk</div></div>
-          <div class="stat l"><div class="ic"><i class="ti ti-cash"></i></div><div class="v">$9,779</div><div class="l">Sold for</div><div class="d">27.3% margin</div></div>
-          <div class="stat a"><div class="ic"><i class="ti ti-users"></i></div><div class="v">37</div><div class="l">Active sellers</div><div class="d">4 pending vetting</div></div>
-          <div class="stat"><div class="ic"><i class="ti ti-building"></i></div><div class="v">18</div><div class="l">Buyers &amp; brands</div><div class="d">2 enterprise</div></div>
-        </div>
-        <div class="wedge">
-          <div class="big">778K+</div>
-          <div class="wt"><h4>RTB saturation is the wedge.</h4><p>The incumbent burns 778K–1.1M rate-limited pings a day against a handful of winning bids. Our rail de-dupes at the source — one caller, one clean transaction, no spiderweb.</p></div>
-        </div>
-        <div class="doors">
-          <div class="door"><div class="ic"><i class="ti ti-video"></i></div><h4>Creators</h4><div class="v">tag &amp; earn</div><p>Tag a call/lead offer in content. Paid per qualified result.</p></div>
-          <div class="door c2"><div class="ic"><i class="ti ti-rocket"></i></div><h4>Advertisers</h4><div class="v">run &amp; sell</div><p>Run ads, generate verified calls, list into the exchange.</p></div>
-          <div class="door c3"><div class="ic"><i class="ti ti-arrows-exchange"></i></div><h4>Vetted brokers</h4><div class="v">approved only</div><p>Good brokers bank. Heavy vetting keeps bad actors out.</p></div>
-          <div class="door"><div class="ic"><i class="ti ti-building"></i></div><h4>Brands</h4><div class="v">browse &amp; buy</div><p>Liberty Mutual to GEICO — bid on verified inventory.</p></div>
-        </div>
-      </div>
-
-      <!-- MARKET -->
-      <div class="page" data-page="market">
-        <div class="ptitle"><div><h1><i class="ti ti-building-store"></i> Marketplace</h1><div class="sub">Live, verified inventory — bid in real time.</div></div></div>
-        <div class="fmtbar" id="fmtbar">
-          <button class="fmt on" data-f="all"><i class="ti ti-stack-2"></i> All</button>
-          <button class="fmt" data-f="call"><i class="ti ti-phone-call"></i> Calls</button>
-          <button class="fmt" data-f="lead"><i class="ti ti-forms"></i> Leads</button>
-          <button class="fmt" data-f="xfer"><i class="ti ti-transfer"></i> Transfers</button>
-        </div>
-        <div class="chips" id="vf"></div>
-        <div class="demobar"><span class="l">Bid by caller demographics</span>
-          <span class="demo">Age</span><span class="demo">Income</span><span class="demo">Location</span><span class="demo">Carrier</span><span class="demo">Home value</span><span class="demo">Mortgage</span>
-        </div>
-        <div class="grid2" id="lots">
-          <div class="lot" data-fmt="call"><div class="r1"><div><h4>Auto insurance <span class="fbg call">Call</span></h4><div class="meta"><span class="live"><span class="dot"></span>Live</span>· <span class="src"><i class="ti ti-shield-check"></i>Consent verified</span> · TX · 38s</div></div><div class="bid"><div class="amt">$42</div><div class="l">top bid</div></div></div><div class="chan"><span class="src"><i class="ti ti-eye-check"></i>Source: Facebook (rail-verified)</span><code>ch #A4F2</code></div><div class="bar"><span style="width:72%"></span></div><div class="act"><button class="btn">Bid to receive</button><button class="btn ghost sm"><i class="ti ti-eye"></i></button></div></div>
-          <div class="lot" data-fmt="lead"><div class="r1"><div><h4>Medicare <span class="fbg lead">Lead</span></h4><div class="meta"><span class="src"><i class="ti ti-shield-check"></i>Consent verified</span> · FL · creator-sourced</div></div><div class="bid"><div class="amt">$28</div><div class="l">top bid</div></div></div><div class="chan"><span class="src"><i class="ti ti-eye-check"></i>Source: creator (verified)</span><code>ch #C19B</code></div><div class="bar"><span style="width:54%"></span></div><div class="act"><button class="btn">Bid to receive</button><button class="btn ghost sm"><i class="ti ti-eye"></i></button></div></div>
-          <div class="lot" data-fmt="xfer"><div class="r1"><div><h4>Final expense <span class="fbg xfer">Transfer</span></h4><div class="meta"><span class="live"><span class="dot"></span>Live</span>· <span class="src"><i class="ti ti-shield-check"></i>Consent verified</span> · OH · 60+</div></div><div class="bid"><div class="amt">$35</div><div class="l">top bid</div></div></div><div class="chan"><span class="src"><i class="ti ti-eye-check"></i>Source: vetted broker</span><code>ch #E7D3</code></div><div class="bar"><span style="width:63%"></span></div><div class="act"><button class="btn">Bid to receive</button><button class="btn ghost sm"><i class="ti ti-eye"></i></button></div></div>
-          <div class="lot" data-fmt="lead"><div class="r1"><div><h4>Home insurance <span class="fbg lead">Lead</span></h4><div class="meta"><span class="src"><i class="ti ti-shield-check"></i>Consent verified</span> · CA · home $600k+</div></div><div class="bid"><div class="amt">$31</div><div class="l">top bid</div></div></div><div class="chan"><span class="src"><i class="ti ti-eye-check"></i>Source: Paid Search (verified)</span><code>ch #B8K1</code></div><div class="bar"><span style="width:48%"></span></div><div class="act"><button class="btn">Bid to receive</button><button class="btn ghost sm"><i class="ti ti-eye"></i></button></div></div>
-        </div>
-        <div class="note" style="margin-top:18px;"><b>The rail sees the truth.</b> Because TrackDrive mints the number, we verify a call really came from its claimed source vs. a broker reselling it. Buyers filter by real source — not a claimed one.</div>
-      </div>
-
-      <!-- OFFERS -->
-      <div class="page" data-page="offers">
-        <div class="ptitle"><div><h1><i class="ti ti-tags"></i> Offers</h1><div class="sub">Approved and available offers you can run.</div></div><button class="btn" onclick="go('apply')"><i class="ti ti-plus"></i> Apply to run</button></div>
-        <div class="card"><div class="ch"><h3>Approved offers</h3></div><div class="cb">
-          <table><thead><tr><th>Status</th><th>Name</th><th>Category</th><th>Lang</th><th>Source type</th><th></th></tr></thead><tbody>
-            <tr><td><span class="badge ok">Approved</span></td><td>Auto Insurance</td><td>Auto Insurance</td><td>English</td><td>Inbound</td><td><span class="tact" onclick="openModal('mOffer')">View <i class="ti ti-chevron-right"></i></span></td></tr>
-            <tr><td><span class="badge ok">Approved</span></td><td>Medicare</td><td>Health — Medicare</td><td>English</td><td>Inbound</td><td><span class="tact">View <i class="ti ti-chevron-right"></i></span></td></tr>
-            <tr><td><span class="badge ok">Approved</span></td><td>Final Expense</td><td>Final Expense</td><td>English</td><td>Inbound</td><td><span class="tact">View <i class="ti ti-chevron-right"></i></span></td></tr>
-            <tr><td><span class="badge ok">Approved</span></td><td>Home Insurance</td><td>Home Insurance</td><td>English</td><td>Inbound</td><td><span class="tact">View <i class="ti ti-chevron-right"></i></span></td></tr>
-          </tbody></table>
-        </div></div>
-        <div class="card"><div class="ch"><h3>Available offers</h3></div><div class="cb">
-          <table><thead><tr><th>Status</th><th>Name</th><th>Category</th><th>Lang</th><th></th></tr></thead><tbody>
-            <tr><td><span class="badge av">Available</span></td><td>ACA</td><td>Health — ACA</td><td>English</td><td><span class="tact" onclick="go('apply')">Apply to run <i class="ti ti-player-play"></i></span></td></tr>
-            <tr><td><span class="badge av">Available</span></td><td>Roofing</td><td>Roofing inbounds</td><td>English</td><td><span class="tact" onclick="go('apply')">Apply to run <i class="ti ti-player-play"></i></span></td></tr>
-            <tr><td><span class="badge av">Available</span></td><td>MVA</td><td>Motor Vehicle Accident</td><td>English</td><td><span class="tact" onclick="go('apply')">Apply to run <i class="ti ti-player-play"></i></span></td></tr>
-            <tr><td><span class="badge av">Available</span></td><td>Debt</td><td>Debt $10k</td><td>Spanish</td><td><span class="tact" onclick="go('apply')">Apply to run <i class="ti ti-player-play"></i></span></td></tr>
-          </tbody></table>
-        </div></div>
-      </div>
-
-      <!-- CALLS -->
-      <div class="page" data-page="calls">
-        <div class="ptitle"><div><h1><i class="ti ti-phone"></i> Call Logs</h1><div class="sub">Every call, tracked and attributed on the rail.</div></div><button class="btn ghost"><i class="ti ti-download"></i> Export CSV</button></div>
-        <div class="synced"><span class="sd"></span> <b>Live-synced with TrackDrive</b> · numbers, recordings & consent flow straight from your admin panel — no export, no bolt-on <span class="slink">Manage integration <i class="ti ti-external-link"></i></span></div>
-        <div class="card"><div class="cb">
-          <table><thead><tr><th>Date</th><th>Offer</th><th>Source</th><th>Caller ID</th><th>Duration</th><th>Revenue</th><th></th></tr></thead><tbody>
-            <tr><td><div class="dcell"><span class="dd">Jul 5</span><span class="dt">11:18 AM</span></div></td><td>Home Insurance</td><td><span class="src"><i class="ti ti-eye-check"></i>Facebook</span></td><td class="mono">+1 620…0778</td><td><span class="dur">00:53</span></td><td><span class="stcell miss"><span class="d2"></span>$0.00</span></td><td><span class="tact"><i class="ti ti-player-play"></i> Play</span></td></tr>
-            <tr><td><div class="dcell"><span class="dd">Jul 5</span><span class="dt">11:16 AM</span></div></td><td>Home Insurance</td><td><span class="src"><i class="ti ti-eye-check"></i>Facebook</span></td><td class="mono">+1 248…5433</td><td><span class="dur">06:49</span></td><td><span class="stcell paid"><span class="d2"></span>$43.02</span></td><td><span class="tact"><i class="ti ti-player-play"></i> Play</span></td></tr>
-            <tr><td><div class="dcell"><span class="dd">Jul 5</span><span class="dt">10:37 AM</span></div></td><td>HVAC</td><td><span class="src"><i class="ti ti-eye-check"></i>Paid Search</span></td><td class="mono">+1 256…3942</td><td><span class="dur">02:00</span></td><td><span class="stcell paid"><span class="d2"></span>$51.62</span></td><td><span class="tact"><i class="ti ti-player-play"></i> Play</span></td></tr>
-            <tr><td><div class="dcell"><span class="dd">Jul 5</span><span class="dt">09:55 AM</span></div></td><td>Final Expense</td><td><span class="src"><i class="ti ti-eye-check"></i>Broker (vetted)</span></td><td class="mono">+1 541…3002</td><td><span class="dur">17:27</span></td><td><span class="stcell paid"><span class="d2"></span>$45.00</span></td><td><span class="tact"><i class="ti ti-player-play"></i> Play</span></td></tr>
-            <tr><td><div class="dcell"><span class="dd">Jul 5</span><span class="dt">08:52 AM</span></div></td><td>Medicare</td><td><span class="src"><i class="ti ti-eye-check"></i>Creator</span></td><td class="mono">+1 512…9416</td><td><span class="dur">00:55</span></td><td><span class="stcell paid"><span class="d2"></span>$28.00</span></td><td><span class="tact"><i class="ti ti-player-play"></i> Play</span></td></tr>
-          </tbody></table>
-        </div></div>
-      </div>
-
-      <!-- BUYERS -->
-      <div class="page" data-page="buyers">
-        <div class="ptitle"><div><h1><i class="ti ti-building"></i> Buyers &amp; Brands</h1><div class="sub">From performance buyers to enterprise brands.</div></div><button class="btn" onclick="openModal('mBuyer')"><i class="ti ti-plus"></i> Create buyer</button></div>
-        <div class="card"><div class="cb">
-          <table><thead><tr><th>Company</th><th>Type</th><th>Restrict dupes</th><th>Predictive routing</th><th>Month</th><th>Status</th></tr></thead><tbody>
-            <tr><td><b>Liberty Mutual</b></td><td><span class="badge pn">Enterprise brand</span></td><td>Yes</td><td>On</td><td>$12,400</td><td><span class="badge ok">Active</span></td></tr>
-            <tr><td><b>GEICO</b></td><td><span class="badge pn">Enterprise brand</span></td><td>Yes</td><td>On</td><td>$9,180</td><td><span class="badge ok">Active</span></td></tr>
-            <tr><td>Black Wing Ventures</td><td>Performance buyer</td><td>No</td><td>On</td><td>$6,295</td><td><span class="badge ok">Active</span></td></tr>
-            <tr><td>Inventum Strategies</td><td>Performance buyer</td><td>No</td><td>On</td><td>$4,585</td><td><span class="badge ok">Active</span></td></tr>
-            <tr><td>Crossblade Media</td><td>Broker (vetted)</td><td>No</td><td>On</td><td>$1,644</td><td><span class="badge ok">Active</span></td></tr>
-            <tr><td>Frontline Financial</td><td>Performance buyer</td><td>Yes</td><td>Off</td><td>$1,320</td><td><span class="badge pa">Paused</span></td></tr>
-          </tbody></table>
-        </div></div>
-        <div class="note"><b>Brands trust the room because it's vetted.</b> Enterprise buyers like Liberty Mutual only buy where every seller is traceable and every call's source is verified on the rail.</div>
-      </div>
-
-      <!-- RTB HEALTH -->
-      <div class="page" data-page="rtb">
-        <div class="ptitle"><div><h1><i class="ti ti-activity"></i> RTB Health</h1><div class="sub">The ping-saturation problem, made visible — this is the wedge.</div></div></div>
-        <div class="wedge">
-          <div class="big">778K</div>
-          <div class="wt"><h4>Rate-limited pings yesterday.</h4><p>The incumbent floods the exchange with 778K–1.1M rate-limited requests a day against a handful of winning bids. Every dot below is wasted infrastructure. Our rail de-dupes at the source.</p></div>
-        </div>
-        <div class="stats">
-          <div class="stat"><div class="ic"><i class="ti ti-broadcast"></i></div><div class="v">3,037</div><div class="l">RTB bids</div></div>
-          <div class="stat l"><div class="ic"><i class="ti ti-trophy"></i></div><div class="v">15</div><div class="l">Winning bids</div><div class="d">0.5% win rate</div></div>
-          <div class="stat a"><div class="ic"><i class="ti ti-ban"></i></div><div class="v">55,678</div><div class="l">Rejected requests</div></div>
-          <div class="stat a"><div class="ic"><i class="ti ti-alert-triangle"></i></div><div class="v">778,606</div><div class="l">Rate-limited</div><div class="d" style="color:var(--amber)">the spiderweb</div></div>
-        </div>
-        <div class="card"><div class="ch"><h3>Ring Tree target dispositions</h3><span style="font-size:11px;color:var(--t3)">why bids fail — per target</span></div><div class="cb">
-          <table><thead><tr><th>Target</th><th>Accept/Reject</th><th>Min revenue</th><th>Missing bid</th><th>Invalid phone</th><th>Duration exceeded</th><th>Ping timeout</th><th>API failed</th></tr></thead><tbody>
-            <tr><td>ACA Inbounds RTB</td><td>8,890</td><td>0</td><td>0</td><td>0</td><td>2</td><td>90</td><td>4,166</td></tr>
-            <tr><td>All In Marketing FE-RTB</td><td>6,684</td><td>0</td><td>0</td><td>0</td><td>0</td><td>11</td><td>6,673</td></tr>
-            <tr><td>ICD Home Insurance</td><td>12,422</td><td>0</td><td>0</td><td>0</td><td>0</td><td>27</td><td>20</td></tr>
-            <tr><td>Ancelet Final Expense CTV</td><td>143</td><td>0</td><td>0</td><td>0</td><td>0</td><td>2</td><td>4</td></tr>
-          </tbody></table>
-        </div></div>
-        <div class="note"><b>Creator translation:</b> "Ping timeout" and "API failed" mean a buyer's system couldn't answer fast enough, so the call went nowhere. Our rail cleans this — your traffic actually connects and pays, instead of bouncing around a broken auction.</div>
-      </div>
-
-      <!-- APPLY -->
-      <div class="page" data-page="apply">
-        <div class="ptitle"><div><h1><i class="ti ti-clipboard-check"></i> Apply &amp; Request RTT</h1><div class="sub">Apply, get vetted, connect to a live buyer.</div></div></div>
-        <div class="steps">
-          <div class="step"><span class="n">1</span><span class="ic"><i class="ti ti-user-plus"></i></span><div><h4>Referred by a TD account</h4><p>No anonymous signup. A current client vouches you in — traceability from day one.</p></div></div>
-          <div class="step"><span class="n">2</span><span class="ic"><i class="ti ti-clipboard-check"></i></span><div><h4>Apply to an offer</h4><p>Pick a vertical, declare and segment your traffic sources, upload creative for review.</p></div></div>
-          <div class="step"><span class="n">3</span><span class="ic"><i class="ti ti-file-certificate"></i></span><div><h4>Pass vetting + sign compliance</h4><p>References checked, no-redline contract signed. Misrepresenting source = termination.</p></div></div>
-          <div class="step"><span class="n">4</span><span class="ic"><i class="ti ti-plug-connected"></i></span><div><h4>Request RTT — connect to buyers</h4><p>Your approved offer links to a live buyer target. Calls route to the highest bidder.</p></div></div>
-          <div class="step"><span class="n">5</span><span class="ic"><i class="ti ti-cash"></i></span><div><h4>Get paid weekly</h4><p>Buyers prepay ($500 min); publishers paid weekly. Idle 45 days = auto-deactivate.</p></div></div>
-        </div>
-      </div>
-
-      <!-- VET -->
-      <div class="page" data-page="vet">
-        <div class="ptitle"><div><h1><i class="ti ti-shield-check"></i> Vetting &amp; Compliance</h1><div class="sub">Vetted brokers bank. Bad actors don't get in.</div></div></div>
-        <div class="vet">
-          <div class="vc"><div class="ic"><i class="ti ti-address-book"></i></div><h4>References required</h4><p>Every applicant supplies references. We call them — vets the applicant and recruits the reference.</p></div>
-          <div class="vc amber"><div class="ic"><i class="ti ti-file-shield"></i></div><h4>No-redline contract</h4><p>One compliance agreement, take it or leave it. Backed by real counsel.</p></div>
-          <div class="vc"><div class="ic"><i class="ti ti-eye-check"></i></div><h4>Source transparency</h4><p>The rail shows where calls truly originate. Claimed ≠ real is caught at the DID.</p></div>
-          <div class="vc"><div class="ic"><i class="ti ti-shield-lock"></i></div><h4>Litigator scrubbing built in</h4><p>Blacklist Alliance / known-litigator lists run natively at pennies per call.</p></div>
-          <div class="vc amber"><div class="ic"><i class="ti ti-users-group"></i></div><h4>Referral accountability</h4><p>An invite skips the waitlist — not the vetting. Vouch someone in and their conduct reflects on your standing. Keeps the small pay-per-call world honest.</p></div>
-        </div>
-        <div class="contract"><span class="ic"><i class="ti ti-alert-triangle"></i></span><p><b>The teeth:</b> applicants check "I understand that misrepresentation of traffic sources or failure to segment third-party traffic results in termination and may result in non-payment." That clause is why brands trust the room.</p></div>
-      </div>
-
-      <!-- COMPLIANCE -->
-      <div class="page" data-page="comp">
-        <div class="ptitle"><div><h1><i class="ti ti-certificate"></i> Compliance</h1><div class="sub">Built into the rail — not an afterthought. This is why brands trust the room.</div></div><button class="btn ghost"><i class="ti ti-file-text"></i> 2026 TCPA brief</button></div>
-
-        <div class="stats">
-          <div class="stat"><div class="ic"><i class="ti ti-shield-check"></i></div><div class="v">98.6%</div><div class="l">Consent-verified calls</div><div class="d">PEWC on file</div></div>
-          <div class="stat l"><div class="ic"><i class="ti ti-list-check"></i></div><div class="v">Daily</div><div class="l">DNC scrub</div><div class="d">FCC needs ≤31 days</div></div>
-          <div class="stat a"><div class="ic"><i class="ti ti-flag"></i></div><div class="v">3</div><div class="l">Flagged for review</div><div class="d" style="color:var(--amber)">team reviewing</div></div>
-          <div class="stat"><div class="ic"><i class="ti ti-archive"></i></div><div class="v">5 yr</div><div class="l">Consent records kept</div><div class="d">TSR requirement</div></div>
-        </div>
-
-        <div class="card"><div class="ch"><h3>Built-in compliance flow</h3><span style="font-size:11px;color:var(--t3)">every call passes these gates before it connects</span></div><div class="cb">
-          <table><thead><tr><th>Gate</th><th>What it does</th><th>Why <span class="hint" style="font-weight:400;text-transform:none;letter-spacing:0">(creator translation)</span></th><th>Status</th></tr></thead><tbody>
-            <tr><td>PEWC capture</td><td>Prior express written consent stored + timestamped</td><td>Proof the person said "yes, call me"</td><td><span class="badge ok">Enforced</span></td></tr>
-            <tr><td>Source verification</td><td>Rail confirms real origin vs. claimed</td><td>We prove your traffic is really yours</td><td><span class="badge ok">Enforced</span></td></tr>
-            <tr><td>DNC + reassigned-number scrub</td><td>Federal/state DNC + Reassigned Numbers DB</td><td>Blocks numbers you're not allowed to call</td><td><span class="badge ok">Pre-connect</span></td></tr>
-            <tr><td>Litigator scrub</td><td>Blacklist Alliance / known-litigator lists</td><td>Keeps lawsuit-hunters off your calls</td><td><span class="badge ok">Pre-connect</span></td></tr>
-            <tr><td>AI-voice disclosure</td><td>Auto-disclosure if AI/prerecorded used</td><td>Required by law before the pitch</td><td><span class="badge ok">Enforced</span></td></tr>
-          </tbody></table>
-        </div></div>
-
-        <div class="note" style="margin-bottom:18px;"><b>2026 update:</b> the FCC's one-to-one consent rule was struck down — brokered/shared consent is legal again. The fight is now <b>consent quality</b>: genuine, documented, provable. Buyers inherit the consent defects of whoever captured the lead — so our rail stores the proof on every call. That's the liability shield.</div>
-
-        <div class="card"><div class="ch"><h3>Manual review — flagged accounts</h3><span style="font-size:11px;color:var(--t3)">fails the built-in flow → our team reviews, like a Google/Snap ad rep</span></div><div class="cb">
-          <table><thead><tr><th>Account</th><th>Flag reason</th><th>Type</th><th>Reviewer</th><th>Status</th><th></th></tr></thead><tbody>
-            <tr><td>Verbalking Holdings</td><td>Consent record incomplete</td><td>Broker</td><td>Kynzie</td><td><span class="badge pn">In review</span></td><td><span class="tact">Open <i class="ti ti-chevron-right"></i></span></td></tr>
-            <tr><td>NLD Media</td><td>Source mismatch on rail</td><td>Advertiser</td><td>Sam</td><td><span class="badge pn">In review</span></td><td><span class="tact">Open <i class="ti ti-chevron-right"></i></span></td></tr>
-            <tr><td>Mighty Mint</td><td>New broker — first payout hold</td><td>Broker</td><td>Kynzie</td><td><span class="badge av">Pending docs</span></td><td><span class="tact">Open <i class="ti ti-chevron-right"></i></span></td></tr>
-          </tbody></table>
-        </div></div>
-        <div class="note"><b>The revenue angle:</b> manual review isn't just support — it's a paid compliance layer (like a Google ad rep pushing an edge-case through). Brokers who can't self-serve their way past the gate pay for a human to review and approve. Moat + margin.</div>
-      </div>
-
-      <!-- AI OPS -->
-      <div class="page" data-page="ai">
-        <div class="ptitle"><div><h1><i class="ti ti-sparkles"></i> AI Ops</h1><div class="sub">Your marketplace AI — transcribes, summarizes, and flags every call.</div></div></div>
-
-        <div class="botcard">
-          <div class="bot"><div class="face"><span class="eye l"></span><span class="eye r"></span><span class="mouth"></span></div></div>
-          <div class="botmsg">
-            <div class="bname">Drivey <span class="bt">TrackDrive AI</span></div>
-            <p><b>Morning, Sam.</b> I listened to all 47 calls from today. Revenue's up 12%, avg call quality is strong — but <b>2 calls from NLD Media look off.</b> Short durations, source mismatch on the rail. Want me to pull them up?</p>
-            <div class="bactions"><button class="btn sm" onclick="go('ai')"><i class="ti ti-flag"></i> Review 2 flagged</button><button class="btn ghost sm"><i class="ti ti-file-text"></i> Full daily summary</button></div>
-          </div>
-        </div>
-
-        <div class="lbl2"><span>Today's summary</span></div>
-        <div class="grid2">
-          <div class="aicard"><div class="ah"><i class="ti ti-report"></i> Daily digest</div><p><b>47 calls</b> · $2,140 revenue · 27% margin. Top performer: <b>Home Insurance</b> (Facebook traffic). Weakest: Final Expense — 3 short calls under 30s. <b>Creators drove 38%</b> of qualified calls today — up from 24% last week.</p></div>
-          <div class="aicard"><div class="ah"><i class="ti ti-alert-triangle" style="color:var(--amber)"></i> Flagged for you</div><p><b>NLD Media — 2 calls.</b> Both under 20s, and the claimed source (Paid Search) doesn't match what the rail saw. Possible misrepresentation. <b>Recommend review before payout.</b></p><div class="bactions"><button class="btn sm">Open calls</button><button class="btn ghost sm"><i class="ti ti-send"></i> Forward to advertiser</button></div></div>
-        </div>
-
-        <div class="lbl2"><span>Transcriptions</span><span style="font-size:11px;color:var(--t3);font-weight:400;margin-left:auto;">auto-generated on every call</span></div>
-        <div class="card"><div class="cb">
-          <table><thead><tr><th>Call</th><th>AI summary</th><th>Sentiment</th><th>Flag</th><th></th></tr></thead><tbody>
-            <tr><td><div class="dcell"><span class="dd">Home Ins.</span><span class="dt">11:16 AM · 6:49</span></div></td><td style="max-width:340px;font-size:12.5px;color:var(--t2)">Caller wants a quote for a $600k home, ready to switch carriers. High intent — asked about bundling auto.</td><td><span class="senti pos"><i class="ti ti-mood-smile"></i> Positive</span></td><td><span class="badge ok">Clean</span></td><td><span class="tact"><i class="ti ti-file-text"></i> Read</span></td></tr>
-            <tr><td><div class="dcell"><span class="dd">Final Exp.</span><span class="dt">9:55 AM · 0:18</span></div></td><td style="max-width:340px;font-size:12.5px;color:var(--t2)">Call dropped after 18s. Caller seemed confused about why they were contacted. Source unclear.</td><td><span class="senti neg"><i class="ti ti-mood-confuzed"></i> Confused</span></td><td><span class="badge pn">Flagged</span></td><td><span class="tact"><i class="ti ti-file-text"></i> Read</span></td></tr>
-            <tr><td><div class="dcell"><span class="dd">Medicare</span><span class="dt">8:52 AM · 0:55</span></div></td><td style="max-width:340px;font-size:12.5px;color:var(--t2)">Qualified senior, asked about coverage options. Creator-sourced, consent confirmed on recording.</td><td><span class="senti pos"><i class="ti ti-mood-smile"></i> Positive</span></td><td><span class="badge ok">Clean</span></td><td><span class="tact"><i class="ti ti-file-text"></i> Read</span></td></tr>
-          </tbody></table>
-        </div></div>
-        <div class="note"><b>Why this is the moat:</b> Ringba records calls — nobody turns them into an ops brain. Drivey transcribes, scores, and flags every conversation, catching fraud <b>before payout</b> and saving brokers hours of manual QA. That's the layer competitors can't copy.</div>
-      </div>
-
-      <!-- WHITE LABEL -->
-      <div class="page" data-page="wl">
-        <div class="ptitle"><div><h1><i class="ti ti-palette"></i> White-Label</h1><div class="sub">Build once. Skin infinitely.</div></div></div>
-        <!--WLKEEP-->
-        <div class="steps">
-          <div class="step"><span class="n">1</span><span class="ic"><i class="ti ti-building-store"></i></span><div><h4>TrackDrive Exchange (now)</h4><p>Our own gated marketplace for TD clients. Proves the model, generates revenue, becomes the reference build.</p></div></div>
-          <div class="step"><span class="n">2</span><span class="ic"><i class="ti ti-palette"></i></span><div><h4>Skin layer</h4><p>Swap colors, logo, domain. Same rail, same token, same auction — a partner's branded front end.</p></div></div>
-          <div class="step"><span class="n">3</span><span class="ic"><i class="ti ti-brand-tiktok"></i></span><div><h4>Partner instances</h4><p>Snap and TikTok plug in their audience and business model. We hand them the network they'd take years to learn.</p></div></div>
-          <div class="step"><span class="n">4</span><span class="ic"><i class="ti ti-world"></i></span><div><h4>Any company, their own rails</h4><p>Enterprises find advertisers or run their own, route calls to their targets — powered invisibly by TrackDrive.</p></div></div>
-        </div>
-        <div class="note" style="margin-top:16px;"><b>The moat:</b> the rail and the consent token stay TrackDrive's, no matter whose logo is on the skin. Partners get distribution; TrackDrive owns the standard everyone rides.</div>
-      </div>
-
-    </div>
-  </div>
+<div class="side">
+<div class="brand"><span class="m">TD</span><span style="color:#fff">Exchange</span></div>
+<div class="nav" id="nav">
+<a class="on" data-p="dash">Dashboard</a>
+<a data-p="market">Marketplace</a>
+<a data-p="offers">Offers</a>
+<a data-p="calls">Call Logs</a>
+<a data-p="ai">AI Ops</a>
+<div class="sec">Exchange</div>
+<a data-p="buyers">Buyers &amp; Brands</a>
+<a data-p="apply">Apply &amp; RTT</a>
+<a data-p="rtb">RTB Health</a>
+<a data-p="vet">Vetting</a>
+<a data-p="comp">Compliance</a>
+<div class="sec">Platform</div>
+<a data-p="wl">White-Label</a>
+</div></div>
+<div class="main">
+<div class="top"><div class="money"><span class="m rec"><span class="mic">$</span><span><span class="mv">$9,779</span><span class="ml">Received</span></span></span><span class="m pen"><span class="mic">⏱</span><span><span class="mv">$0.00</span><span class="ml">Pending</span></span></span></div><div style="font-size:13px">Samantha · <span style="color:var(--t3)">Admin</span></div></div>
+<div class="content">
+<div class="page on" id="p-dash"><h1>Dashboard</h1><div class="psub">One marketplace. Every kind of demand.</div>
+<div class="stats"><div class="stat"><div class="v">598</div><div class="l">Total calls</div></div><div class="stat"><div class="v">$9,779</div><div class="l">Sold for</div></div><div class="stat"><div class="v">37</div><div class="l">Active sellers</div></div><div class="stat"><div class="v">18</div><div class="l">Buyers</div></div></div>
+<div class="wedge"><div class="big">778K+</div><div><h4>RTB saturation is the wedge.</h4><p>The incumbent burns 778K–1.1M rate-limited pings a day against a handful of winning bids. Our rail de-dupes at the source — one caller, one clean transaction.</p></div></div>
+<div class="doors"><div class="door"><div class="i">C</div><h4>Creators</h4><p>Tag a call/lead offer. Paid per qualified result.</p></div><div class="door c2"><div class="i">A</div><h4>Advertisers</h4><p>Run ads, list verified calls into the exchange.</p></div><div class="door c3"><div class="i">B</div><h4>Vetted brokers</h4><p>Good brokers bank. Heavy vetting keeps bad actors out.</p></div><div class="door"><div class="i">$</div><h4>Brands</h4><p>Liberty Mutual to GEICO — bid on verified inventory.</p></div></div></div>
+<div class="page" id="p-market"><h1>Marketplace</h1><div class="psub">Live, verified inventory — bid in real time.</div>
+<div style="margin-bottom:14px"><span class="fmt on" onclick="pk(this)">All</span><span class="fmt" onclick="pk(this)">Calls</span><span class="fmt" onclick="pk(this)">Leads</span><span class="fmt" onclick="pk(this)">Transfers</span></div>
+<div class="chips"><span class="chip on">All</span><span class="chip">Auto</span><span class="chip">Medicare</span><span class="chip">Final expense</span><span class="chip">ACA</span><span class="chip">Home</span><span class="chip">Debt</span><span class="chip">HVAC</span><span class="chip">MVA</span><span class="chip">Roofing</span></div>
+<div class="demobar"><span class="dl2">BID BY CALLER DEMOGRAPHICS</span><span class="demo">Age</span><span class="demo">Income</span><span class="demo">Location</span><span class="demo">Carrier</span><span class="demo">Home value</span><span class="demo">Mortgage</span></div>
+<div class="mgrid">
+<div class="mlot"><div class="mr1"><div><h4>Auto insurance <span class="fbg call">Call</span></h4><div class="mmeta"><span class="live"><span class="ldot"></span>Live</span> · <span class="src">✓ Consent verified</span> · TX · 38s</div></div><div class="mbid"><div class="mamt">$42</div><div class="mbl">top bid</div></div></div><div class="mchan"><span class="src">✓ Source: Facebook (rail-verified)</span><code>ch #A4F2</code></div><div class="mbar"><span style="width:72%"></span></div><div class="mact"><button class="mbtn">BID TO RECEIVE</button></div></div>
+<div class="mlot"><div class="mr1"><div><h4>Medicare <span class="fbg lead">Lead</span></h4><div class="mmeta"><span class="src">✓ Consent verified</span> · FL · creator-sourced</div></div><div class="mbid"><div class="mamt">$28</div><div class="mbl">top bid</div></div></div><div class="mchan"><span class="src">✓ Source: creator (verified)</span><code>ch #C19B</code></div><div class="mbar"><span style="width:54%"></span></div><div class="mact"><button class="mbtn">BID TO RECEIVE</button></div></div>
+<div class="mlot"><div class="mr1"><div><h4>Final expense <span class="fbg xfer">Transfer</span></h4><div class="mmeta"><span class="live"><span class="ldot"></span>Live</span> · <span class="src">✓ Consent verified</span> · OH · 60+</div></div><div class="mbid"><div class="mamt">$35</div><div class="mbl">top bid</div></div></div><div class="mchan"><span class="src">✓ Source: vetted broker</span><code>ch #E7D3</code></div><div class="mbar"><span style="width:63%"></span></div><div class="mact"><button class="mbtn">BID TO RECEIVE</button></div></div>
+<div class="mlot"><div class="mr1"><div><h4>Home insurance <span class="fbg lead">Lead</span></h4><div class="mmeta"><span class="src">✓ Consent verified</span> · CA · home $600k+</div></div><div class="mbid"><div class="mamt">$31</div><div class="mbl">top bid</div></div></div><div class="mchan"><span class="src">✓ Source: Paid Search (verified)</span><code>ch #B8K1</code></div><div class="mbar"><span style="width:48%"></span></div><div class="mact"><button class="mbtn">BID TO RECEIVE</button></div></div>
 </div>
-
-<!-- CREATE BUYER MODAL -->
-<div class="overlay" id="mBuyer">
-  <div class="modal">
-    <div class="mh"><h3><i class="ti ti-building" style="color:var(--green)"></i> Create buyer</h3><button class="x" onclick="closeModal('mBuyer')">&times;</button></div>
-    <div class="mb">
-      <div class="field"><label>Company name</label><input placeholder="e.g. Liberty Mutual"></div>
-      <div class="frow">
-        <div class="field"><label>Buyer type</label><select><option>Enterprise brand</option><option>Performance buyer</option><option>Broker (vetted)</option></select></div>
-        <div class="field"><label>Sub ID <span class="hint">tracking tag</span></label><input placeholder="optional"></div>
-      </div>
-      <div class="field"><label>Prepay balance <span class="hint">buyers prepay before receiving</span></label><input value="$500.00"></div>
-      <div class="toggle"><div class="tl">Allow buyer to pause targets<span class="hint">can they stop their own call flow</span></div><div class="sw" onclick="this.classList.toggle('on')"></div></div>
-      <div class="toggle"><div class="tl">Allow buyer to set call &amp; concurrency caps<span class="hint">limit how many calls at once</span></div><div class="sw" onclick="this.classList.toggle('on')"></div></div>
-      <div class="toggle"><div class="tl">Allow buyer to dispute conversions<span class="hint">contest a call that didn't qualify</span></div><div class="sw" onclick="this.classList.toggle('on')"></div></div>
-      <div class="field" style="margin-top:15px;"><label>Restrict duplicates <span class="hint">block the same caller twice</span></label><select><option>Do not restrict</option><option>Restrict within campaign</option><option>Restrict across account</option></select></div>
-      <div class="field"><label>Predictive routing <span class="hint">send calls to highest predicted value</span></label>
-        <div class="seg" style="margin-top:4px;"><button class="on">Use estimated revenue</button><button>Use campaign setting</button></div>
-      </div>
-      <div class="field"><label>Priority bump <span class="hint">boost this buyer in the auction (-10 to +10)</span></label><input type="range" min="-10" max="10" value="0"></div>
-    </div>
-    <div class="mf"><button class="btn ghost" onclick="closeModal('mBuyer')">Cancel</button><button class="btn" onclick="closeModal('mBuyer')">Create buyer</button></div>
-  </div>
-</div>
-
-<!-- OFFER DETAIL MODAL -->
-<div class="overlay" id="mOffer">
-  <div class="modal">
-    <div class="mh"><h3><i class="ti ti-tags" style="color:var(--green)"></i> Offer: Auto Insurance <span class="badge ok">Approved</span></h3><button class="x" onclick="closeModal('mOffer')">&times;</button></div>
-    <div class="mb">
-      <div class="dl"><span class="k">Applied</span><span class="v">May 23, 2026</span></div>
-      <div class="dl"><span class="k">Category</span><span class="v">Auto Insurance</span></div>
-      <div class="dl"><span class="k">Format</span><span class="v">Call + Lead</span></div>
-      <div class="dl"><span class="k">Language</span><span class="v">English</span></div>
-      <div class="dl"><span class="k">Payout <span class="hint" style="font-weight:400">what you earn / qualified call</span></span><span class="v" style="color:var(--green)">$20–60</span></div>
-      <div class="dl"><span class="k">Traffic source type</span><span class="v">Inbound</span></div>
-      <div class="field" style="margin-top:15px;"><label>Approved traffic sources <span class="hint">where your calls/leads come from</span></label>
-        <div class="tsrc"><span>Paid Search</span><span>Social — Facebook</span><span>Digital Video — YouTube</span><span>Creator content</span><span>Television</span></div>
-      </div>
-      <div class="field" style="margin-top:6px;"><label>3rd-party affiliates? <span class="hint">reselling others' traffic</span></label>
-        <div class="seg" style="margin-top:4px;"><button>Yes</button><button class="on">No</button><button>Some</button></div>
-      </div>
-      <div class="dl" style="margin-top:8px;"><span class="k">Creative status</span><span class="v" style="color:var(--green)"><i class="ti ti-photo-check"></i> Approved (3 files)</span></div>
-      <div class="dl"><span class="k">RTT status <span class="hint" style="font-weight:400">connected to a live buyer</span></span><span class="v" style="color:var(--green)">Active</span></div>
-      <div class="field" style="margin-top:16px;"><label>Routing mode <span class="hint">how calls reach buyers</span></label>
-        <div class="seg" style="margin-top:4px;" id="routeSeg">
-          <button class="on" onclick="pickRoute(this,'smart')">Smart Routing</button>
-          <button onclick="pickRoute(this,'rr')">Round-robin</button>
-          <button onclick="pickRoute(this,'direct')">Direct / capped</button>
-        </div>
-        <div id="routeDesc" style="margin-top:9px;font-size:12px;color:var(--t2);line-height:1.5;background:var(--gs);border:1px solid #cfe8d6;border-radius:9px;padding:11px 13px;">
-          <b style="color:var(--green)">Smart Routing (RTB / Ping-Post).</b> TrackDrive auto-routes each call to the highest-value buyer in real time. Creators just see "best price, automatically."
-        </div>
-      </div>
-      <div class="dl"><span class="k">Bidding URL</span><span class="v" style="font-family:ui-monospace,monospace;font-size:11px;">td.exchange/rtb/AI4F2…</span></div>
-    </div>
-    <div class="mf"><button class="btn ghost" onclick="closeModal('mOffer')">Close</button><button class="btn" onclick="closeModal('mOffer')"><i class="ti ti-plug-connected"></i> Request RTT</button></div>
-  </div>
-</div>
-
+<div class="note" style="margin-top:16px"><b>The rail sees the truth.</b> Because TrackDrive mints the number, we verify a call really came from its claimed source vs. a broker reselling it.</div></div>
+<div class="page" id="p-offers"><h1>Offers</h1><div class="psub">Approved and available offers you can run.</div>
+<div class="card2" style="padding:0;overflow:hidden"><div style="padding:14px 17px;border-bottom:1px solid var(--line);font-family:'Rubik';font-weight:500;font-size:15px">Approved offers</div>
+<table style="border:none;border-radius:0"><tr><th>Status</th><th>Applied</th><th>Name</th><th>Category</th><th>Lang</th><th>Source type</th><th></th></tr>
+<tr><td><span class="badge">Approved</span></td><td>May 23, 2026</td><td>Auto Insurance</td><td>Auto Insurance</td><td>English</td><td>Inbound</td><td><span style="color:var(--green);font-weight:600;font-size:12px;cursor:pointer">View ›</span></td></tr>
+<tr><td><span class="badge">Approved</span></td><td>May 14, 2026</td><td>Medicare</td><td>Health — Medicare</td><td>English</td><td>Inbound</td><td><span style="color:var(--green);font-weight:600;font-size:12px;cursor:pointer">View ›</span></td></tr>
+<tr><td><span class="badge">Approved</span></td><td>May 14, 2026</td><td>Final Expense</td><td>Final Expense</td><td>English</td><td>Inbound</td><td><span style="color:var(--green);font-weight:600;font-size:12px;cursor:pointer">View ›</span></td></tr>
+<tr><td><span class="badge">Approved</span></td><td>May 12, 2026</td><td>Home Insurance</td><td>Home Insurance</td><td>English</td><td>Inbound</td><td><span style="color:var(--green);font-weight:600;font-size:12px;cursor:pointer">View ›</span></td></tr></table></div>
+<div class="card2" style="padding:0;overflow:hidden"><div style="padding:14px 17px;border-bottom:1px solid var(--line);font-family:'Rubik';font-weight:500;font-size:15px">Available offers</div>
+<table style="border:none;border-radius:0"><tr><th>Status</th><th>Name</th><th>Category</th><th>Lang</th><th></th></tr>
+<tr><td><span class="badge a">Available</span></td><td>ACA</td><td>Health — ACA</td><td>English</td><td><span style="color:var(--green);font-weight:600;font-size:12px;cursor:pointer">Apply to run ▶</span></td></tr>
+<tr><td><span class="badge a">Available</span></td><td>Roofing</td><td>Roofing inbounds</td><td>English</td><td><span style="color:var(--green);font-weight:600;font-size:12px;cursor:pointer">Apply to run ▶</span></td></tr>
+<tr><td><span class="badge a">Available</span></td><td>MVA</td><td>Motor Vehicle Accident</td><td>English</td><td><span style="color:var(--green);font-weight:600;font-size:12px;cursor:pointer">Apply to run ▶</span></td></tr>
+<tr><td><span class="badge a">Available</span></td><td>Debt</td><td>Debt $10k</td><td>Spanish</td><td><span style="color:var(--green);font-weight:600;font-size:12px;cursor:pointer">Apply to run ▶</span></td></tr></table></div>
+<div class="note"><b>Routing modes:</b> Smart Routing (RTB/Ping-Post) auto-sends to highest bidder · Round-robin splits named buyers (GEICO ↔ Liberty) · Direct/capped for manual control.</div></div>
+<div class="page" id="p-calls"><h1>Call Logs</h1><div class="psub">Every call, tracked and attributed on the rail.</div>
+<div class="synced"><span class="sd"></span> <b>Live-synced with TrackDrive</b> · numbers, recordings &amp; consent flow straight from your admin panel — no export, no bolt-on <span class="slink">Manage integration ›</span></div>
+<div class="card2" style="padding:0;overflow:hidden"><table style="border:none;border-radius:0"><tr><th>Date</th><th>Offer</th><th>Source</th><th>Caller ID</th><th>Duration</th><th>Revenue</th><th></th></tr>
+<tr><td><div class="dcell"><span class="dd">Jul 5</span><span class="dt">11:16 AM</span></div></td><td>Home Insurance</td><td class="src">✓ Facebook</td><td class="mono">+1 248…5433</td><td class="dur">06:49</td><td><span class="stc paid"><span class="d2"></span>$43.02</span></td><td><span class="tact">▶ Play</span></td></tr>
+<tr><td><div class="dcell"><span class="dd">Jul 5</span><span class="dt">10:37 AM</span></div></td><td>HVAC</td><td class="src">✓ Paid Search</td><td class="mono">+1 256…3942</td><td class="dur">02:00</td><td><span class="stc paid"><span class="d2"></span>$51.62</span></td><td><span class="tact">▶ Play</span></td></tr>
+<tr><td><div class="dcell"><span class="dd">Jul 5</span><span class="dt">09:55 AM</span></div></td><td>Final Expense</td><td class="src">✓ Broker (vetted)</td><td class="mono">+1 541…3002</td><td class="dur">17:27</td><td><span class="stc paid"><span class="d2"></span>$45.00</span></td><td><span class="tact">▶ Play</span></td></tr>
+<tr><td><div class="dcell"><span class="dd">Jul 5</span><span class="dt">08:52 AM</span></div></td><td>Medicare</td><td class="src">✓ Creator</td><td class="mono">+1 512…9416</td><td class="dur">00:55</td><td><span class="stc paid"><span class="d2"></span>$28.00</span></td><td><span class="tact">▶ Play</span></td></tr>
+<tr><td><div class="dcell"><span class="dd">Jul 5</span><span class="dt">11:18 AM</span></div></td><td>Home Insurance</td><td class="src">✓ Facebook</td><td class="mono">+1 620…0778</td><td class="dur">00:53</td><td><span class="stc miss"><span class="d2"></span>$0.00</span></td><td><span class="tact">▶ Play</span></td></tr>
+</table></div></div>
+<div class="page" id="p-ai"><h1>AI Ops</h1><div class="psub">Your marketplace AI — transcribes, summarizes, flags.</div>
+<div class="bot"><div class="face"><span></span></div><div><b>Drivey · TrackDrive AI</b><p>Morning, Sam. I listened to all 47 calls today. Revenue up 12%. But <b>2 calls from NLD Media look off</b> — short durations, source mismatch. Review before payout?</p></div></div>
+<div class="card2"><b>Daily digest:</b> 47 calls · $2,140 revenue · 27% margin. Creators drove 38% of qualified calls — up from 24% last week.</div>
+<div class="note"><b>The moat:</b> Ringba records calls — nobody turns them into an ops brain. Drivey flags fraud before payout.</div></div>
+<div class="page" id="p-buyers"><h1>Buyers &amp; Brands</h1><div class="psub">From performance buyers to enterprise brands.</div>
+<table><tr><th>Company</th><th>Type</th><th>Month</th><th>Status</th></tr>
+<tr><td><b>Liberty Mutual</b></td><td><span class="badge a">Enterprise brand</span></td><td>$12,400</td><td><span class="badge">Active</span></td></tr>
+<tr><td><b>GEICO</b></td><td><span class="badge a">Enterprise brand</span></td><td>$9,180</td><td><span class="badge">Active</span></td></tr>
+<tr><td>Black Wing Ventures</td><td>Performance buyer</td><td>$6,295</td><td><span class="badge">Active</span></td></tr>
+<tr><td>Crossblade Media</td><td>Broker (vetted)</td><td>$1,644</td><td><span class="badge">Active</span></td></tr></table></div>
+<div class="page" id="p-apply"><h1>Apply &amp; Request RTT</h1><div class="psub">Apply, get vetted, connect to a live buyer.</div>
+<div class="step"><span class="n">1</span><div><b>Referred by a TD account</b><p>No anonymous signup — traceability from day one.</p></div></div>
+<div class="step"><span class="n">2</span><div><b>Apply to an offer</b><p>Pick a vertical, segment traffic sources, upload creative.</p></div></div>
+<div class="step"><span class="n">3</span><div><b>Pass vetting + sign compliance</b><p>References checked, no-redline contract. Misrepresentation = termination.</p></div></div>
+<div class="step"><span class="n">4</span><div><b>Request RTT — connect to buyers</b><p>Routing sends calls to the highest bidder.</p></div></div>
+<div class="step"><span class="n">5</span><div><b>Get paid weekly</b><p>Buyers prepay; publishers paid weekly. Idle 45 days = auto-deactivate.</p></div></div></div>
+<div class="page" id="p-rtb"><h1>RTB Health</h1><div class="psub">The ping-saturation problem, made visible — this is the wedge.</div>
+<div class="stats"><div class="stat"><div class="v">3,037</div><div class="l">RTB bids</div></div><div class="stat"><div class="v">15</div><div class="l">Winning bids</div></div><div class="stat"><div class="v">55,678</div><div class="l">Rejected</div></div><div class="stat"><div class="v">778,606</div><div class="l">Rate-limited</div></div></div>
+<table><tr><th>Target</th><th>Accept/Reject</th><th>Ping timeout</th><th>API failed</th></tr>
+<tr><td>ACA Inbounds RTB</td><td>8,890</td><td>90</td><td>4,166</td></tr>
+<tr><td>All In Marketing FE-RTB</td><td>6,684</td><td>11</td><td>6,673</td></tr>
+<tr><td>ICD Home Insurance</td><td>12,422</td><td>27</td><td>20</td></tr></table>
+<div class="note" style="margin-top:14px"><b>Creator translation:</b> "ping timeout" / "API failed" = a buyer couldn't answer fast enough, so the call went nowhere. Our rail cleans this — your traffic connects and pays.</div></div>
+<div class="page" id="p-vet"><h1>Vetting &amp; Compliance</h1><div class="psub">Vetted brokers bank. Bad actors don't get in.</div>
+<div class="card2"><b>References required</b> — we call them. Vets the applicant, recruits the reference.</div>
+<div class="card2"><b>No-redline contract</b> — one compliance agreement, take it or leave it.</div>
+<div class="card2"><b>Source transparency</b> — the rail shows where calls truly originate.</div>
+<div class="card2"><b>Referral accountability</b> — an invite skips the waitlist, not the vetting. Vouch someone in and their conduct reflects on your standing.</div></div>
+<div class="page" id="p-comp"><h1>Compliance</h1><div class="psub">Built into the rail — why brands trust the room.</div>
+<table><tr><th>Gate</th><th>What it does</th><th>Status</th></tr>
+<tr><td>PEWC capture</td><td>Consent stored + timestamped</td><td><span class="badge">Enforced</span></td></tr>
+<tr><td>Source verification</td><td>Rail confirms real origin</td><td><span class="badge">Enforced</span></td></tr>
+<tr><td>DNC + reassigned scrub</td><td>Pre-connect, ≤31 days</td><td><span class="badge">Enforced</span></td></tr>
+<tr><td>Litigator scrub</td><td>Blacklist Alliance native</td><td><span class="badge">Enforced</span></td></tr></table>
+<div class="note" style="margin-top:14px"><b>2026 update:</b> one-to-one consent rule struck down — brokered consent legal again. The fight is consent quality: our rail stores proof on every call. Flagged accounts route to our team for manual review — a moat and a paid layer.</div></div>
+<div class="page" id="p-wl"><h1>White-Label</h1><div class="psub">Build once. Skin infinitely.</div>
+<div class="step"><span class="n">1</span><div><b>TrackDrive Exchange (now)</b><p>Our own gated marketplace. Proves the model, becomes the reference build.</p></div></div>
+<div class="step"><span class="n">2</span><div><b>Skin layer</b><p>Swap colors, logo, domain. Same rail, token, auction underneath.</p></div></div>
+<div class="step"><span class="n">3</span><div><b>Partner instances</b><p>Snap &amp; TikTok plug in their audience. We hand them the whole network.</p></div></div>
+<div class="step"><span class="n">4</span><div><b>Any company, their own rails</b><p>Enterprises route calls to their targets — powered invisibly by TrackDrive.</p></div></div>
+<div class="note" style="margin-top:14px"><b>The moat:</b> the rail &amp; consent token stay TrackDrive's, no matter whose logo is on the skin.</div></div>
+</div></div></div>
 <script>
-document.addEventListener('DOMContentLoaded',function(){
-  function $(id){return document.getElementById(id);}
-  function hide(id){var e=$(id);if(e)e.classList.add('hidden');}
-  function show(id){var e=$(id);if(e)e.classList.remove('hidden');}
-  window.signin=function(){hide('login');show('app');};
-  window.signout=function(){hide('app');show('login');};
-  window.gateNext=function(){hide('gateStep1');show('gateStep2');};
-  window.gateBack=function(){hide('gateStep3');show('gateStep2');};
-  window.gateClaim=function(){hide('gateStep3');show('gateStep4');};
-  window.gateBackClaim=function(){hide('gateStep4');show('gateStep3');};
-  window.pickRole=function(r){ if(r==='sell'){hide('gateStep2');show('gateStep3');} else { signin(); } };
-  window.openModal=function(id){show(id);};
-  window.closeModal=function(id){hide(id);};
-  window.segPick=function(b){var p=b.parentNode;if(!p)return;var bs=p.getElementsByTagName('button');for(var i=0;i<bs.length;i++)bs[i].classList.remove('on');b.classList.add('on');};
-  window.pickRoute=function(btn,mode){var seg=$('routeSeg');if(seg){var bs=seg.getElementsByTagName('button');for(var i=0;i<bs.length;i++)bs[i].classList.remove('on');}btn.classList.add('on');var d=$('routeDesc');if(!d)return;if(mode==='smart')d.innerHTML='<b style="color:var(--green)">Smart Routing (RTB / Ping-Post).</b> TrackDrive auto-routes each call to the highest-value buyer in real time.';if(mode==='rr')d.innerHTML='<b style="color:var(--green)">Round-robin.</b> Split calls between named buyers — GEICO ↔ Liberty Mutual. You control the mix.';if(mode==='direct')d.innerHTML='<b style="color:var(--green)">Direct / capped.</b> Send to one buyer up to a cap, then overflow. Full manual control.';};
-  var navs=document.querySelectorAll('.nav a[data-pg]');
-  var pages=document.querySelectorAll('.page');
-  window.go=function(pg){navs.forEach(function(n){n.classList.toggle('on',n.getAttribute('data-pg')===pg);});pages.forEach(function(p){p.classList.toggle('on',p.getAttribute('data-page')===pg);});var c=document.querySelector('.content');if(c)c.scrollTop=0;window.scrollTo(0,0);};
-  navs.forEach(function(n){n.addEventListener('click',function(){go(n.getAttribute('data-pg'));});});
-  var vf=$('vf');
-  if(vf){["All","Auto","Medicare","Final expense","ACA","Home","Debt","HVAC","MVA","Roofing"].forEach(function(v,i){var b=document.createElement('button');b.className='chip'+(i===0?' on':'');b.textContent=v;b.onclick=function(){var cs=vf.querySelectorAll('.chip');for(var k=0;k<cs.length;k++)cs[k].classList.remove('on');b.classList.add('on');};vf.appendChild(b);});}
-  var fb=document.querySelectorAll('.fmt');var lots=document.querySelectorAll('#lots .lot');
-  fb.forEach(function(b){b.onclick=function(){fb.forEach(function(x){x.classList.remove('on');});b.classList.add('on');var f=b.getAttribute('data-f');lots.forEach(function(l){l.style.display=(f==='all'||l.getAttribute('data-fmt')===f)?'':'none';});};});
-  document.querySelectorAll('.blk').forEach(function(el){el.onclick=function(){el.innerHTML='blocked';el.style.color='var(--green)';};});
+(function(){
+var nav=document.getElementById('nav');
+nav.addEventListener('click',function(e){
+var a=e.target.closest('a[data-p]');if(!a)return;
+var p=a.getAttribute('data-p');
+var links=nav.getElementsByTagName('a');for(var i=0;i<links.length;i++)links[i].classList.remove('on');
+a.classList.add('on');
+var pages=document.getElementsByClassName('page');for(var j=0;j<pages.length;j++)pages[j].classList.remove('on');
+var t=document.getElementById('p-'+p);if(t)t.classList.add('on');
+window.scrollTo(0,0);
 });
+window.pk=function(el){var s=el.parentNode.getElementsByClassName('fmt');for(var i=0;i<s.length;i++)s[i].classList.remove('on');el.classList.add('on');};
+})();
 </script>
-</body>
-</html>
+</body></html>
